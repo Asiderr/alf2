@@ -217,7 +217,7 @@ class ThrAdapt(Mean):
                 if treshold > 255:
                     treshold = 255
                 # progowanie adaptacyjne
-                if single_pixel >= treshold:
+                if single_pixel < treshold:
                     self.result_matrix_thr_adapt[y][x] = 0
                 else:
                     self.result_matrix_thr_adapt[y][x] = 255

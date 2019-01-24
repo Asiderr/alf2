@@ -118,9 +118,9 @@ class TestFrameSizeCheck(unittest.TestCase):
         c.check_k()
         self.assertEqual(c.size, 5, msg="Blad wyznaczania k")
 """
-# mediana
+# srednia
 
-"""
+
 class TestMean(unittest.TestCase):
     def test_mean(self):
         c = main.Mean()
@@ -143,9 +143,9 @@ class TestMean(unittest.TestCase):
         c.mean(matrix)
         plt.imshow(c.result_matrix, cmap='gray')
         plt.show()
-"""
 
-# Mediana
+
+# mediana
 
 """
 class TestMedian(unittest.TestCase):
@@ -214,6 +214,7 @@ class TestThrConst(unittest.TestCase):
         plt.imshow(c.result_matrix, cmap='gray')
         plt.show()
 """
+# THR_adapt
 
 """
 class TestThrAdapt(unittest.TestCase):
@@ -235,27 +236,28 @@ class TestThrAdapt(unittest.TestCase):
             [1, 1, 1, 1, 1, 1],
         ]
         c = main.ThrAdapt()
-        c.thr_adapt(matrix) 
+        c.thr_adapt(matrix)
         self.assertEqual(
             c.result_matrix_thr_adapt,
             [
-                [0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 255, 255],
-                [0, 0, 0, 0, 255, 0],
-                [0, 0, 0, 0, 255, 255],
-                [0, 0, 0, 0, 0, 0],
+                [255, 255, 255, 255, 0, 0],
+                [255, 255, 255, 255, 255, 255],
+                [255, 255, 255, 0, 255, 255],
+                [255, 255, 255, 255, 255, 255],
+                [255, 255, 255, 255, 0, 0],
             ],
             msg="Blad progowania Thr"
         )
 
     def test_thr_adapt_img(self):
         d = main.ImageAnalysis()
-        d.get_images("tekst_big.png")
+        d.get_images("tekst.png")
         matrix = d.img
         c = main.ThrAdapt()
         c.thr_adapt(matrix)
         plt.imshow(c.result_matrix_thr_adapt, cmap='gray')
         plt.show()
 """
+
 if __name__ == '__main__':
     unittest.main()
