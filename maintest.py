@@ -120,7 +120,7 @@ class TestFrameSizeCheck(unittest.TestCase):
 """
 # srednia
 
-
+"""
 class TestMean(unittest.TestCase):
     def test_mean(self):
         c = main.Mean()
@@ -144,7 +144,7 @@ class TestMean(unittest.TestCase):
         plt.imshow(c.result_matrix, cmap='gray')
         plt.show()
 
-
+"""
 # mediana
 
 """
@@ -216,7 +216,7 @@ class TestThrConst(unittest.TestCase):
 """
 # THR_adapt
 
-"""
+
 class TestThrAdapt(unittest.TestCase):
     def test_check_C(self):
         c = main.ThrAdapt()
@@ -251,13 +251,13 @@ class TestThrAdapt(unittest.TestCase):
 
     def test_thr_adapt_img(self):
         d = main.ImageAnalysis()
-        d.get_images("tekst.png")
+        d.get_images("tekst_big.png")
         matrix = d.img
         c = main.ThrAdapt()
         c.thr_adapt(matrix)
         plt.imshow(c.result_matrix_thr_adapt, cmap='gray')
         plt.show()
-"""
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -11,13 +11,12 @@ class ImageAnalysis:
 
 
 class FrameSizeCheck:
-    # Sprawdz rozmiar ramki (mean, median)
-    # ramka thr adapt w klasie
+    # Sprawdz rozmiar ramki 
     # klasa odpowadajaca za sprawdzenie poprawnosci wielkosci
     # parametru k (wielkosci ramki)
     # tu tez bedzie pobierana ramka do dalszych dzialan
     def check_k(self):
-        # pobranie liczby k domyslnie 9 do mean i median
+        # pobranie liczby k domyslnie 9
         try:
             self.k = int(input("Podaj liczbe k lub wcisnij enter by uzyskac k = 9)\n") or "9")
         except:
@@ -182,22 +181,6 @@ class ThrAdapt(Mean):
             # jesli nie bedzie powtorz pobranie liczby
             self.check_C()
 
-    def check_k(self):
-        # pobranie liczby k domyslnie 9 do thr_adapt
-        try:
-            self.k = int(input("Podaj liczbe k lub wcisnij enter by uzyskac k = 9)\n") or "9")
-        except:
-            # zabezpieczenie przed podaniem czegos innego niz liczba
-            self.check_k()
-        # k po pierwiastkowaniu musi byc nie pazysta liczba calkowita
-        # prawidlowe k np. 9, 25, 49 itd.
-        x = pow(self.k, 0.5)
-        if(x % 2 == 1 and x is not 1):
-            self.size = x
-        else:
-            # jesli nie bedzie powtorz pobranie liczby
-            self.check_k()
-
     def thr_adapt(self, matrix):
         # pobranie liczby C
         self.check_C()
@@ -218,6 +201,8 @@ class ThrAdapt(Mean):
                     treshold = 255
                 # progowanie adaptacyjne
                 if single_pixel < treshold:
+                    self.result_matrix_thr_adapt[y][x] = 0
+                elif single_pixel == 0 and treshold == 0:
                     self.result_matrix_thr_adapt[y][x] = 0
                 else:
                     self.result_matrix_thr_adapt[y][x] = 255
