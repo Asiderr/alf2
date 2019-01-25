@@ -51,7 +51,7 @@ class FrameSizeCheck:
         # okreslenie wierzcholkow kwadratu o ramionach sqrt(k) x sqrt(k)
         # z markerem w punkcie centralnym
         # [x, y]
-        # dla marker [2,2] k = 25
+        # dla marker [2,2] k = 5
         # [
         #   [square_d, c, c,     c, square_b],
         #   [c,        c, c,     c, c       ],
