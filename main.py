@@ -1,4 +1,12 @@
 #!/usr/bin/env python
+"""
+Do poprawnego dzialania programu w folderze roboczym musi znajdowac sie
+folder images, a w nim pliki tekst_big.png, tekst.png, ciemna_strona_ksiezyca_brud.png
+Zgodnie z zaleceniem w funkcji zapisu i pokazywania obrazow znajduje sie
+argument save (funkcja img_save_n_show linia 251) ktory nalezy zmienic na True
+by w folderze roboczym zostal zapisany obraz (result.png).
+"""
+
 import os
 import cv2
 import numpy as np
@@ -11,13 +19,15 @@ class ImageAnalysis:
 
 
 class FrameSizeCheck:
-    # Sprawdz rozmiar ramki 
+    # Sprawdz rozmiar ramki
+    # 0.5 pkt
     # klasa odpowadajaca za sprawdzenie poprawnosci wielkosci
     # parametru k (wielkosci ramki)
     # tu tez bedzie pobierana ramka do dalszych dzialan
     def check_k(self):
         # pobranie liczby k domyslnie 9
         try:
+            print("============================")
             self.k = int(input("Podaj liczbe k lub wcisnij enter by uzyskac k = 9)\n") or "9")
         except:
             # zabezpieczenie przed podaniem czegos innego niz liczba
@@ -134,9 +144,11 @@ class Median(FrameSizeCheck):
 
 class ThrConst:
     # klasa odpowiadajaca za progowanie stala wartoscia
+    # 1 pkt
     def check_Thr(self):
         # pobranie liczby thr domyslnie 80
         try:
+            print("============================")
             self.Thr = int(input("Podaj Thr lub wcisnij enter by uzyskac thr = 80)\n") or "80")
         except:
             # zabezpieczenie przed podaniem czegos innego niz liczba
@@ -172,6 +184,7 @@ class ThrAdapt(Mean):
     def check_C(self):
         # pobranie liczby C domyslnie 80
         try:
+            print("============================")
             self.C = int(input("Podaj C lub wcisnij enter by uzyskac C = 0)\n") or "0")
         except:
             # zabezpieczenie przed podaniem czegos innego niz liczba
@@ -202,7 +215,134 @@ class ThrAdapt(Mean):
                 # progowanie adaptacyjne
                 if single_pixel < treshold:
                     self.result_matrix_thr_adapt[y][x] = 0
-                elif single_pixel == 0 and treshold == 0:
-                    self.result_matrix_thr_adapt[y][x] = 0
                 else:
                     self.result_matrix_thr_adapt[y][x] = 255
+
+
+def end_validation():
+    # funkcja pytajaca czy urzytkownik chce zakonczyc dzialanie programu
+    while(True):
+        print("============================")
+        end = input("\nCzy chcesz zakonczyc [y/n]:\n")
+        if end == "n":
+            check_end = True
+            return check_end
+        elif end == "y":
+            check_end = False
+            return check_end
+        else:
+            continue
+
+
+def img_size_validation():
+    # funkcja wyboru wielkosci obrazu dla thr_const i thr_adapt
+    while(True):
+        print("============================")
+        print("Wybierz rozmiar obrazu\nWpisz rozmiar lub numer:")
+        print("============================")
+        print("1. Duzy\n2. Maly")
+        size = input()
+        if size == "1" or size == "Duzy" or size == "duzy" or size == "big":
+            return "big"
+        elif size == "2" or size == "Maly" or size == "maly" or size == "small":
+            return "small"
+        else:
+            continue
+
+
+def img_save_n_show(matrix_org, matrix_result, name, save=False):
+    # funkcja zapisujaca obrazy w folderze
+    # by zapisac obraz zmien argument save=True
+    # 1 pkt
+    fig = plt.figure()
+    # sklejenie obrazow
+    fig.subplots_adjust(wspace=0.000)
+    fig.add_subplot(1, 2, 1)
+    # wyswietlenie 1szego
+    plt.imshow(matrix_org, cmap='gray')
+    # wylaczenie osi
+    plt.axis('off')
+    # dodanie opisu
+    plt.annotate("Oryginalny", (40, len(matrix_org)-20), color="r", size=8)
+    fig.add_subplot(1, 2, 2)
+    plt.imshow(matrix_result, cmap="gray")
+    plt.axis('off')
+    plt.annotate(name, (40, len(matrix_result)-20), color="r", size=8)
+    # zapis obrazu jako result.png w folderze images
+    if save:
+        plt.savefig("./result.png", bbox_inches='tight', pad_inches=0, dpi=400)
+    # wyswietlenie obrazu
+    plt.show()
+
+
+def main():
+    # funkcja main wywolujaca filtracje i progowania
+    # 1.5 pkt
+    check_end = True
+    while(check_end):
+        print("============================")
+        print("Wybierz filtracje/progowanie\nWpisz nazwe lub numer:")
+        print("============================")
+        print("1. Mean (Dla k = 9 ok. 30s)\n2. Median (Dla k = 9 ok. 40s)\n3. Thr_const (ok. 5s)\n4. Thr_adapt (k = 9 ok. 4 min, k = 3 ok. 1 min))")
+        name = input()
+        # 1. Mean
+        if name == "1" or name == "Mean" or name == "mean":
+            # Uzyskanie macierzy ksiezyca
+            d = ImageAnalysis()
+            d.get_images("ciemna_strona_ksiezyca_brud.png")
+            matrix = d.img
+            # Uruchomienie klasy mean odpowiadajacej za srednia
+            c = Mean()
+            c.mean(matrix)
+            # Funkcja zapisujaca (save=True) i pokazujaca obraz wynikowy
+            img_save_n_show(matrix, c.result_matrix, "Mean")
+            # Sprawdzenie czy urzytkownik chce zakonczyc
+            check_end = end_validation()
+        # 2. Median
+        if name == "2" or name == "Median" or name == "median":
+            # Uzyskanie macierzy ksiezyca
+            d = ImageAnalysis()
+            d.get_images("ciemna_strona_ksiezyca_brud.png")
+            # Uruchomienie klasy median odpowiadajacej za mediane
+            matrix = d.img
+            c = Median()
+            c.median(matrix)
+            # Funkcja zapisujaca (save=True) i pokazujaca obraz wynikowy
+            img_save_n_show(matrix, c.result_matrix, "Median")
+            # Sprawdzenie czy urzytkownik chce zakonczyc
+            check_end = end_validation()
+        # 3. Thr_const
+        if name == '3' or name == "Thr const" or name == "Thr_const" or name == "thr_const" or name == "thr const":
+            # Wybor rozmiaru tekstu
+            size = img_size_validation()
+            d = ImageAnalysis()
+            if size == "big":
+                d.get_images("tekst_big.png")
+            else:
+                d.get_images("tekst.png")
+            matrix = d.img
+            # Uruchomienie klasy odpowiadajacej za Thr_const
+            C = ThrConst()
+            C.thr_const(matrix)
+            # Funkcja zapisujaca (save=True) i pokazujaca obraz wynikowy
+            img_save_n_show(matrix, C.result_matrix, "Threshold")
+            # Sprawdzenie czy urzytkownik chce zakonczyc
+            check_end = end_validation()
+        # 4. Thr_adapt
+        if name == '4' or name == "Thr adapt" or name == "Thr_adapt" or name == "thr_adapt" or name == "thr adapt":
+            size = img_size_validation()
+            d = ImageAnalysis()
+            if size == "big":
+                d.get_images("tekst_big.png")
+            else:
+                d.get_images("tekst.png")
+            matrix = d.img
+            # Uruchomienie klasy odpowiadajacej za Thr_adapt
+            C = ThrAdapt()
+            C.thr_adapt(matrix)
+            # Funkcja zapisujaca (save=True) i pokazujaca obraz wynikowy
+            img_save_n_show(matrix, C.result_matrix_thr_adapt, "Adaptive Threshold")
+            # Sprawdzenie czy urzytkownik chce zakonczyc
+            check_end = end_validation()
+
+main()

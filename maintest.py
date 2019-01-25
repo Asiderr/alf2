@@ -216,7 +216,7 @@ class TestThrConst(unittest.TestCase):
 """
 # THR_adapt
 
-
+"""
 class TestThrAdapt(unittest.TestCase):
     def test_check_C(self):
         c = main.ThrAdapt()
@@ -257,7 +257,21 @@ class TestThrAdapt(unittest.TestCase):
         c.thr_adapt(matrix)
         plt.imshow(c.result_matrix_thr_adapt, cmap='gray')
         plt.show()
+"""
 
+
+class TestMain(unittest.TestCase):
+    """
+    def test_img_view(self):
+        d = main.ImageAnalysis()
+        d.get_images("tekst_big.png")
+        matrix = d.img
+        d.get_images("tekst.png")
+        mat = d.img
+        main.img_save(matrix, mat, "test")
+    """
+    def test_main(self):
+        main.main()
 
 if __name__ == '__main__':
     unittest.main()
